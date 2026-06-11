@@ -25,11 +25,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y xmlstarlet
           
-          LINE=$(xmlstarlet sel -t -v "//counter[@type='LINE']/@covered" target/site/jacoco/jacoco.xml)
-          MISSED=$(xmlstarlet sel -t -v "//counter[@type='LINE']/@missed" target/site/jacoco/jacoco.xml)
+          FILE=target/site/jacoco/jacoco.xml
           
-          TOTAL=$((LINE + MISSED))
-          COVERAGE=$(awk "BEGIN {printf \"%.2f\", ($LINE/$TOTAL)*100}")
+          LINE_COVERED=$(xmllint --xpath "string(//counter[@type='LINE']/@covered)" $FILE)
+          LINE_MISSED=$(xmllint --xpath "string(//counter[@type='LINE']/@missed)" $FILE)
+          
+          TOTAL=$((LINE_COVERED + LINE_MISSED))
+          COVERAGE=$(awk "BEGIN {printf \"%.2f\", ($LINE_COVERED/$TOTAL)*100}")
           
           echo "=========================="
           echo "LINE COVERAGE: $COVERAGE%"
