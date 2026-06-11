@@ -24,10 +24,19 @@ jobs:
         run: |
           FILE=target/site/jacoco/jacoco.xml
 
-          LINE_COVERED=$(grep -oP 'type="LINE"[^>]*covered="\K[0-9]+' $FILE)
-          LINE_MISSED=$(grep -oP 'type="LINE"[^>]*missed="\K[0-9]+' $FILE)
+          LINE_COVERED=$(grep -oP 'type="LINE"[^>]*covered="\K[0-9]+' $FILE | head -n 1 | tr -d '\n')
+          LINE_MISSED=$(grep -oP 'type="LINE"[^>]*missed="\K[0-9]+' $FILE | head -n 1 | tr -d '\n')
+
+          echo "Covered: $LINE_COVERED"
+          echo "Missed: $LINE_MISSED"
 
           TOTAL=$((LINE_COVERED + LINE_MISSED))
+
+          if [ "$TOTAL" -eq 0 ]; then
+            echo "No coverage data found"
+            exit 0
+          fi
+
           COVERAGE=$(awk "BEGIN {printf \"%.2f\", ($LINE_COVERED/$TOTAL)*100}")
 
           echo "=========================="
