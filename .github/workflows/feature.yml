@@ -1,4 +1,4 @@
-name: Java Build
+name: Feature Pipeline
 
 on:
   push:
