@@ -22,17 +22,14 @@ jobs:
 
       - name: Print code coverage
         run: |
-          sudo apt-get update
-          sudo apt-get install -y xmlstarlet
-          
           FILE=target/site/jacoco/jacoco.xml
-          
-          LINE_COVERED=$(xmllint --xpath "string(//counter[@type='LINE']/@covered)" $FILE)
-          LINE_MISSED=$(xmllint --xpath "string(//counter[@type='LINE']/@missed)" $FILE)
-          
+
+          LINE_COVERED=$(grep -oP 'type="LINE"[^>]*covered="\K[0-9]+' $FILE)
+          LINE_MISSED=$(grep -oP 'type="LINE"[^>]*missed="\K[0-9]+' $FILE)
+
           TOTAL=$((LINE_COVERED + LINE_MISSED))
           COVERAGE=$(awk "BEGIN {printf \"%.2f\", ($LINE_COVERED/$TOTAL)*100}")
-          
+
           echo "=========================="
           echo "LINE COVERAGE: $COVERAGE%"
           echo "=========================="
