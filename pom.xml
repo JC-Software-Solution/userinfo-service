@@ -17,7 +17,7 @@
 		<java.version>25</java.version>
         <minimum.coverage>90</minimum.coverage>
         <sonar.coverage.jacoco.xmlReportPaths>
-            target/site/jacoco/jacoco.xml
+            ../userinfo-service/target/site/jacoco/jacoco.xml
         </sonar.coverage.jacoco.xmlReportPaths>
 	</properties>
 	<dependencies>
